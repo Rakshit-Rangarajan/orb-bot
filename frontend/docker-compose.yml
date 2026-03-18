@@ -1,0 +1,75 @@
+version: "3.9"
+
+# ══════════════════════════════════════════════════════════════
+#  Orb — Docker Compose
+#
+#  Services:
+#    orb-api  — FastAPI backend (embeddings + Pinecone retrieval)
+#    ollama   — Local LLM / embedding server (nomic-embed-text)
+#
+#  Quick start:
+#    1. cp backend/.env.example backend/.env   (fill in your keys)
+#    2. docker compose up -d
+#    3. docker compose exec ollama ollama pull nomic-embed-text
+#    4. PUT your docs in backend/train-docs/
+#    5. curl -X POST http://localhost:8000/ingest-directory \
+#         -H "Content-Type: application/json" \
+#         -d '{"namespace":"default"}'
+# ══════════════════════════════════════════════════════════════
+
+services:
+
+  # ── Orb API (FastAPI) ────────────────────────────────────────
+  orb-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: orb-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      # Override OLLAMA_URL to point at the companion service
+      OLLAMA_URL: http://ollama:11434
+    volumes:
+      # Mount docs folder so you can add files without rebuilding
+      - ./backend/train-docs:/app/train-docs:ro
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - orb-net
+
+  # ── Ollama (Local Embedding Server) ──────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: orb-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"        # expose for debugging; remove in production
+    volumes:
+      - ollama-data:/root/.ollama   # persist pulled models
+    # GPU support — uncomment if your server has NVIDIA GPU
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - orb-net
+
+volumes:
+  ollama-data:    # persists Ollama model weights across restarts
+
+networks:
+  orb-net:
+    driver: bridge

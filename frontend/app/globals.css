@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+
+:root {
+  --bg:      #08060f;
+  --bg1:     #0e0b1e;
+  --bg2:     #141128;
+  --border:  #241b46;
+  --border2: #352860;
+  --purple:  #9333ea;
+  --purpleL: #c084fc;
+  --purpleD: #6d28d9;
+  --green:   #4ade80;
+  --blue:    #38bdf8;
+  --amber:   #fbbf24;
+  --rose:    #fb7185;
+  --text:    #ede8f8;
+  --text2:   #8b7aac;
+  --text3:   #3e3060;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+code, pre, .mono { font-family: 'Fira Code', monospace; }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #9333ea50; border-radius: 3px; }
+
+@keyframes dash { to { stroke-dashoffset: -100; } }
+@keyframes orbPulse {
+  0%,100% { box-shadow: 0 0 0 0 #9333ea40, 0 8px 32px #00000080; }
+  50%      { box-shadow: 0 0 0 10px #9333ea00, 0 8px 32px #00000080; }
+}
+@keyframes orbUp {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes orbBounce {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-4px); }
+}
+
+/* ── Chat prose styles — used by the widget ── */
+.orb-prose h1 { font-size: 1rem; font-weight: 700; margin: .5rem 0 .25rem; color: #ddd6fe; }
+.orb-prose h2 { font-size: .9rem; font-weight: 700; margin: .5rem 0 .25rem; color: #ddd6fe; }
+.orb-prose h3 { font-size: .85rem; font-weight: 600; margin: .4rem 0 .2rem; color: #ddd6fe; }
+.orb-prose p  { margin: 0 0 .45rem; line-height: 1.65; color: #d1c4f0; }
+.orb-prose p:last-child { margin-bottom: 0; }
+.orb-prose ul { margin: .25rem 0 .45rem 1rem; list-style: disc; }
+.orb-prose ol { margin: .25rem 0 .45rem 1rem; list-style: decimal; }
+.orb-prose li { margin-bottom: .2rem; line-height: 1.55; color: #c4b5fd; }
+.orb-prose strong { font-weight: 700; color: #c4b5fd; }
+.orb-prose em     { font-style: italic; color: #a78bfa; }
+.orb-prose a      { color: #a78bfa; text-decoration: underline; }
+.orb-prose blockquote {
+  border-left: 3px solid #7c3aed80;
+  padding-left: .65rem;
+  color: #9ca3af;
+  font-style: italic;
+  margin: .5rem 0;
+}
+.orb-prose hr { border: none; border-top: 1px solid #2d1f5e; margin: .6rem 0; }
+.orb-prose pre.cb {
+  position: relative;
+  background: #07050f;
+  border: 1px solid #3b1d6e;
+  border-radius: 8px;
+  padding: .7rem;
+  margin: .5rem 0;
+  overflow-x: auto;
+}
+.orb-prose pre.cb code {
+  font-family: 'Fira Code', monospace;
+  font-size: .72rem;
+  color: #c4b5fd;
+  white-space: pre;
+}
+.orb-prose .cl {
+  position: absolute;
+  top: 5px; right: 8px;
+  font-size: .58rem;
+  color: #6d28d9;
+  font-family: 'Fira Code', monospace;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.orb-prose code.ic {
+  background: #1e1333;
+  border: 1px solid #4c1d95;
+  border-radius: 4px;
+  padding: .1rem .28rem;
+  font-family: 'Fira Code', monospace;
+  font-size: .78em;
+  color: #c4b5fd;
+}
+
+input, textarea, select { font-family: 'Inter', sans-serif; }
